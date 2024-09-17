@@ -15,7 +15,6 @@ export const getData = async () => {
 };
 
 export const postData = async (data = {}) => {
-  console.log("entered sace data")
   try {
     const response = await axios.post(`${url_wiremock}/__admin/mappings`, data);
     return response.data;

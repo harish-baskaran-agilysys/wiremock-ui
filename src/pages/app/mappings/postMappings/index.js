@@ -10,7 +10,7 @@ import { useRecoilValue } from "recoil";
 import { postData } from "wiremock/axios";
 import TextArea from "wiremock/components/native/textarea";
 
-const PostMappings = () => {
+const PostMappings = (props) => {
   const stub = useRecoilValue(postStub);
 
   const [request, setRequest] = useState(true);
@@ -18,7 +18,9 @@ const PostMappings = () => {
 
   const handleButtonClick = async () => {
     try {
-      const data = await postData(stub);
+      await postData(stub);
+      props.setNewMapping(false);
+      props.setloadAgain(true);
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +30,6 @@ const PostMappings = () => {
     <div className="flex gap-10 ml-4">
       <div className="flex flex-col">
         <div className="flex mt-2 justify-between">
-         
           <Header label="Post Mappings" className={"pt-1 pb-5"} />
           <Button
             icon="fas fa-save"
@@ -58,8 +59,15 @@ const PostMappings = () => {
       </div>
       <div className="border-l-2 border-solid border-sky-400">
         <div className="ml-4 mt-4">
-          <p className="text-sky-600 text-bold underline mb-3"> JSON representations ::</p>
-          <TextArea value={JSON.stringify(stub, null, 2)} className="w-[500px] h-[750px] border border-sky-400" readOnly={true}/>
+          <p className="text-sky-600 text-bold underline mb-3">
+            {" "}
+            JSON representations ::
+          </p>
+          <TextArea
+            value={JSON.stringify(stub, null, 2)}
+            className="w-[500px] h-[750px] border border-sky-400"
+            readOnly={true}
+          />
         </div>
       </div>
     </div>

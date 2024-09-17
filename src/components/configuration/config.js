@@ -1,3 +1,5 @@
+import React from "react";
+
 export function fontSize(size) {
   let fontSize = size
     ? size.toLowerCase() === "extralarge"

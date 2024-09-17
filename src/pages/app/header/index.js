@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "wiremock/components/native/button";
-import ServerHandling from "../serverHandling";
+import ServerHandling from "./serverHandling";
 
 const HeaderMapping = () => {
   return (
