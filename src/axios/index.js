@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-const url = "http://localhost:5000";
+const url = "http://localhost:5001";
 const url_wiremock = "http://localhost:5001";
 
 export const getData = async () => {
@@ -66,5 +66,14 @@ export const checkServer = async (data = {}) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+export const getRequestLog = async () => {
+  try {
+    const response = await axios.get(`${url}/__admin/requests`);
+    return response.data;
+  } catch (error) {
+    throw new Error("Error fetching request log: " + error.message);
   }
 };

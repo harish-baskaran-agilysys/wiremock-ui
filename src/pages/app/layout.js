@@ -12,7 +12,7 @@ const sidebarConfig = {
     {
       title: "Request Logs",
       icon: "far fa-file-lines",
-      path: "/app/logs",
+      path: "/app/mappings/requestLogging",
     },
     {
       title: "Settings",

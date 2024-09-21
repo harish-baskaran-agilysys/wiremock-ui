@@ -6,7 +6,7 @@ import { useState } from "react";
 
 export default function App() {
   const [newMapping, setNewMapping] = useState(false);
-  const [loadAgain, setloadAgain] = useState(false);
+  const [loadAgain, setloadAgain] = useState(true);
 
   return (
     <SidebarLayout>
