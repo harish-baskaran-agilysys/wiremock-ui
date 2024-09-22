@@ -1,0 +1,19 @@
+{
+  "id" : "0c6d2480-065a-4f20-89f5-b89beec92d7a",
+  "name" : "map-3",
+  "request" : {
+    "urlPath" : "/api/3",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "fixedDelayMilliseconds" : 500,
+    "chunkedDribbleDelay" : {
+      "numberOfChunks" : 5,
+      "totalDuration" : 1000
+    }
+  },
+  "uuid" : "0c6d2480-065a-4f20-89f5-b89beec92d7a",
+  "persistent" : true,
+  "insertionIndex" : 0
+}

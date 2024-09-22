@@ -1,0 +1,17 @@
+{
+    "name": "my-wiremock-server",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "start": "nodemon server.js"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.4"
+    },
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^4.19.2",
+        "kill-port-process": "^3.2.1",
+        "tcp-port-used": "^1.0.2"
+    }
+}
