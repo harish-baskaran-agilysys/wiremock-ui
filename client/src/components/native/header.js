@@ -3,7 +3,7 @@ import { fontSize, typeColor } from "../configuration/config";
 const styles = `
 mt-[10px] px-2 
 text-sky-600 font-bold
-min-w-[25%] min-h-[5%]
+min-w-[10%] min-h-[5%]
 `;
 
 const Header = (props) => {

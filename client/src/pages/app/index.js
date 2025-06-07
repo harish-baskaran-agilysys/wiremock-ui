@@ -1,10 +1,13 @@
-import HeaderMapping from "./header";
 import Layout from "./layout";
+import { withAuth } from "wiremock/components/withAuth";
 
-export default function App() {
+function App() {
+
   return (
-    <div className="w-full">
+    <div className="">
       <Layout />
     </div>
   );
 }
+
+export default withAuth(App);

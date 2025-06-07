@@ -1,0 +1,26 @@
+{
+  "id" : "91a362df-871d-43cc-bf71-465049fd16f0",
+  "name" : "test-2 - Copy",
+  "request" : {
+    "urlPath" : "",
+    "method" : "",
+    "headers" : { },
+    "queryParameters" : { },
+    "cookies" : { },
+    "bodyPatterns" : [ ]
+  },
+  "response" : {
+    "status" : 200,
+    "statusMessage" : ""
+  },
+  "uuid" : "91a362df-871d-43cc-bf71-465049fd16f0",
+  "persistent" : true,
+  "metadata" : {
+    "author" : "harish-baskaran-agilysys",
+    "folder" : "",
+    "category" : [ "hint", "loyalty" ],
+    "author_email" : "harish.baskaran1@agilysys.com",
+    "lastUpdatedBy_email" : "harish.baskaran1@agilysys.com"
+  },
+  "insertionIndex" : 8
+}

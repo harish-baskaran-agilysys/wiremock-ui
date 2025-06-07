@@ -3,12 +3,16 @@ import { getData } from "wiremock/axios";
 import Button from "wiremock/components/native/button";
 
 const GetAllMappings = (props) => {
+
   const handleButtonClick = async () => {
+    props.setLoading(true);
     try {
       const data = await getData();
       props.setResponseData(data);
     } catch (error) {
       props.setResponseData("Error: " + error.message);
+    } finally {
+      props.setLoading(false);
     }
   };
 

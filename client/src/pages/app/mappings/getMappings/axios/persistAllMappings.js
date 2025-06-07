@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { persistData } from "wiremock/axios";
+import { getData, persistData } from "wiremock/axios";
 import Button from "wiremock/components/native/button";
 
 const PersistAllMappings = (props) => {
   const handleButtonClick = async () => {
     try {
-      const data = await persistData();
+      let data = await persistData();
+      props.setResponseData(data);
+      data = await getData();
       props.setResponseData(data);
     } catch (error) {
       props.setResponseData("Error: " + error.message);

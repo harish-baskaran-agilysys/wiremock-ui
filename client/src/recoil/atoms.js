@@ -1,19 +1,29 @@
-// atoms.js
+// wiremock/recoil/atoms.js
 import { atom } from "recoil";
+
+export const defaultStub = {
+  name: "",
+  request: {
+    method: "",
+    urlPath: "",
+    queryParameters: {},
+    headers: {},
+    bodyPatterns: [],
+    cookies: {},
+  },
+  response: {
+    status: 200,
+    statusMessage: "",
+    body: {},
+  },
+  metadata: {
+    author: "",
+    folder: "",
+    category: [] // array of category strings
+  }
+};
 
 export const stub = atom({
   key: "stub",
-  default: {
-    name: "",
-    request: {
-      method: "",
-    },
-    response: {
-      fixedDelayMilliseconds: 500,
-      chunkedDribbleDelay: {
-        numberOfChunks: 5,
-        totalDuration: 1000,
-      },
-    },
-  },
+  default: defaultStub,
 });

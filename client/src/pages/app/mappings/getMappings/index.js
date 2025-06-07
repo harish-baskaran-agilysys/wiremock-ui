@@ -1,17 +1,35 @@
-import React, { useState } from "react";
-import PersistAllMappings from "./persistAllMappings";
-import GetAllMappings from "./getAllMappings";
+import React, { useState, useEffect } from "react";
+import GetAllMappings from "./axios/getAllMappings";
 import Mappings from "./mappings";
 import Button from "wiremock/components/native/button";
-import Pagination from "./pagination";
-import usePagination from "./usePagination";
+import Pagination from "../utils/pagination";
+import usePagination from "../utils/usePagination";
+import { useRecoilState } from "recoil";
+import { defaultStub, stub } from "wiremock/recoil/atoms";
+import FilteredMappings from "./FilteredMappings";
+import Logo from "wiremock/components/native/logo";
 
 const GetMappings = (props) => {
- 
   const [responseData, setResponseData] = useState("");
   const [selectedMappingId, setSelectedMappingId] = useState(null);
+  const [stubState, setStubState] = useRecoilState(stub);
+  const [filteredMappings, setFilteredMappings] = useState([]);
+  const [filter, setFilter] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const itemsPerPage = 5; // Set the number of items per page
+  const handleSelectMapping = (mapping) => {
+    setStubState(mapping); // populate entire mapping into the stub
+    props.setSelectedMappingId(mapping.id);
+    props.setNewMapping(false);
+  };
+
+  useEffect(() => {
+    if (!filter) {
+      setFilteredMappings(responseData?.mappings || []);
+    }
+  }, [filter, responseData]);
+
+  const itemsPerPage = 10; // Set the number of items per page
 
   // Use custom pagination hook
   const {
@@ -21,50 +39,88 @@ const GetMappings = (props) => {
     indexOfLastItem,
     goToNextPage,
     goToPreviousPage,
-  } = usePagination(responseData?.mappings?.length || 0, itemsPerPage);
+    goToPage,
+  } = usePagination(filteredMappings?.length || 0, itemsPerPage);
 
   // Get the current mappings to display on the current page
   const currentMappings =
-    responseData?.mappings?.slice(indexOfFirstItem, indexOfLastItem) || [];
+    filteredMappings?.slice(indexOfFirstItem, indexOfLastItem) || [];
+
+  useEffect(() => {
+    goToPage(1); // Reset to page 1 when filtered list changes
+  }, [filteredMappings]);
 
   return (
-    <div className="mt-[10px] pr-[10px] flex flex-col h-full w-full">
-      <div className="flex justify-between mr-[10px]">
-        <div className="flex gap-1 ">
-          <GetAllMappings setResponseData={setResponseData} loadAgain={props.loadAgain} setloadAgain={props.setloadAgain}/>
-          <PersistAllMappings setResponseData={setResponseData} />
+    <div className="pr-[10px] flex flex-col h-[90vh] w-full">
+      <div className="p-2 flex justify-between z-2 ">
+        <div className="flex gap-3">
+          <Logo
+            onClick={() => setFilter(!filter)}
+            icon="fas fa-filter"
+            className="cursor-pointer text-sky-600 mt-3"
+          />
+          <p className="mr-3 mt-2">Total stubs : {filteredMappings.length}</p>
         </div>
-        <Button
-          icon="fas fa-circle-plus"
-          label="New"
-          onClick={() => props.setNewMapping(true)}
+        <div className="flex mr-[10px]">
+          <GetAllMappings
+            setResponseData={setResponseData}
+            loadAgain={props.loadAgain}
+            setloadAgain={props.setloadAgain}
+            setLoading={setLoading}
+          />
+
+          <Button
+            icon="fas fa-circle-plus"
+            label="New"
+            onClick={() => {
+              props.setNewMapping(true);
+              setStubState(defaultStub);
+            }}
+          />
+        </div>
+      </div>
+      {filter ? (
+        <FilteredMappings
+          mappings={responseData?.mappings || []}
+          setFilteredMappings={setFilteredMappings}
+        />
+      ) : (
+        <></>
+      )}
+      <div className="flex-1 overflow-y-auto px-2">
+        {loading ? (
+          <p className="flex justify-center items-center h-[calc(100vh-250px)] w-full">
+            Loading...
+          </p>
+        ) : currentMappings.length > 0 ? (
+          currentMappings.map((mapping) => (
+            <Mappings
+              key={mapping.id}
+              mapping={mapping}
+              setloadAgain={props.setloadAgain}
+              selected={selectedMappingId === mapping.id}
+              filter={filter}
+              onSelect={() => {
+                setSelectedMappingId(mapping.id);
+                handleSelectMapping(mapping);
+              }}
+            />
+          ))
+        ) : (
+          <p className="flex justify-center items-center h-[calc(100vh-250px)] w-full">
+            No mappings available.
+          </p>
+        )}
+      </div>
+      <div className="p-2 border-t border-gray-300 bg-white z-2">
+        {/* Pagination Component */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          goToNextPage={goToNextPage}
+          goToPreviousPage={goToPreviousPage}
         />
       </div>
-      <br />
-      {/* Render current page of mappings */}
-      {currentMappings.length > 0 ? (
-        currentMappings.map((mapping) => (
-          <Mappings
-            key={mapping.id}
-            mapping={mapping}
-            setloadAgain={props.setloadAgain}
-            selected={selectedMappingId === mapping.id}
-            onSelect={() => setSelectedMappingId(mapping.id)}
-          />
-        ))
-      ) : (
-        <p className="flex justify-center items-center h-[calc(100vh-250px)] w-full">
-          No mappings available.
-        </p>
-      )}
-
-      {/* Pagination Component */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        goToNextPage={goToNextPage}
-        goToPreviousPage={goToPreviousPage}
-      />
     </div>
   );
 };

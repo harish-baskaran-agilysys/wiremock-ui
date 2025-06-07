@@ -121,9 +121,9 @@ const Dropdown = (props) => {
         {label}
 
         {isOpen ? (
-          <FontAwesomeIcon icon={faChevronDown} className="w-[15px] h-[15px]" />
-        ) : (
           <FontAwesomeIcon icon={faChevronUp} className="w-[15px] h-[15px]" />
+        ) : (
+          <FontAwesomeIcon icon={faChevronDown} className="w-[15px] h-[15px]" />
         )}
       </button>
 

@@ -1,5 +1,5 @@
 import { RecoilRoot } from "recoil";
-import Sidebar from "../../components/layouts/sidebar";
+import Sidebar from "wiremock/components/layouts/sidebar";
 import HeaderMapping from "./header";
 
 const sidebarConfig = {
@@ -16,9 +16,14 @@ const sidebarConfig = {
     },
     {
       title: "Settings",
-      path: "/app/settings",
+      path: "/app/mappings/settings",
       icon: "fas fa-gear",
     },
+    // {
+    //   title: "Set-Folder",
+    //   path: "/app/mappings/structureMappings",
+    //   icon: "fas fa-folder",
+    // },
   ],
 };
 
@@ -27,10 +32,8 @@ export default function SidebarLayout({ children }) {
     <RecoilRoot>
       <HeaderMapping />
       <div className="flex">
-        <div className="ml-5 my-5">
+        <div className="ml-2 mt-2">
           <Sidebar
-            //companyName="Thruways"
-            //companyIcon="fas fa-text-width"
             menuItems={sidebarConfig.menuItems}
           />
         </div>

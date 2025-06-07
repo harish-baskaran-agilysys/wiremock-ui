@@ -1,0 +1,19 @@
+{
+  "id" : "ddbeedf7-fc1e-4dab-8d70-9aa05e88fea2",
+  "name" : "test-map-11",
+  "request" : {
+    "urlPath" : "/test/map/1",
+    "method" : "POST",
+    "headers" : { },
+    "queryParameters" : { },
+    "bodyPatterns" : [ ]
+  },
+  "response" : {
+    "status" : 200,
+    "statusMessage" : "",
+    "jsonBody" : { }
+  },
+  "uuid" : "ddbeedf7-fc1e-4dab-8d70-9aa05e88fea2",
+  "persistent" : true,
+  "insertionIndex" : 0
+}

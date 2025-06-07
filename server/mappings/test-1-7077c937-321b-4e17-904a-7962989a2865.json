@@ -1,0 +1,24 @@
+{
+  "id" : "7077c937-321b-4e17-904a-7962989a2865",
+  "name" : "test-1",
+  "request" : {
+    "urlPath" : "",
+    "method" : "",
+    "headers" : { },
+    "queryParameters" : { },
+    "cookies" : { },
+    "bodyPatterns" : [ ]
+  },
+  "response" : {
+    "status" : 200,
+    "statusMessage" : ""
+  },
+  "uuid" : "7077c937-321b-4e17-904a-7962989a2865",
+  "persistent" : true,
+  "metadata" : {
+    "author" : "",
+    "folder" : "",
+    "category" : [ ]
+  },
+  "insertionIndex" : 2
+}

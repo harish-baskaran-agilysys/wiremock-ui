@@ -16,6 +16,7 @@
         "express": "^4.19.2",
         "kill-port-process": "^3.2.1",
         "next": "^15.0.0-canary.157",
+        "next-auth": "^4.24.11",
         "tcp-port-used": "^1.0.2"
     }
 }

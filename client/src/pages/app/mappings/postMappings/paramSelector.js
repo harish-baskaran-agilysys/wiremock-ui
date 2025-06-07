@@ -1,29 +1,20 @@
-import { useState } from "react";
-import Button from "wiremock/components/native/button";
-import QueryParamMapping from "./query";
-import HeadersMapping from "./headers";
-import BodyMapping from "./reqBody";
 import { Tab, TabContainer } from "wiremock/components/native/tab";
+import Builder from "./details/builder";
+import JSONRepresentation from "../utils/jsonRepresentation";
 
-const RequestMapping = () => {
+const BuilderMapping = () => {
   return (
-    <div id="request-specification" className="mt-3">
-      <TabContainer size="small">
-        <Tab label="Query Params">
-          <QueryParamMapping />
+    <div id="request-specification">
+      <TabContainer size="medium" defaultTab={0}>
+        <Tab label="Builder">
+          <Builder />
         </Tab>
-        <Tab label="Headers">
-          <HeadersMapping />
-        </Tab>  
-        <Tab label="Cookies">
-          <p>Cookies</p>
-        </Tab>
-        <Tab label="Body">
-          <BodyMapping />
+        <Tab label="JSON Representation">
+          <JSONRepresentation />
         </Tab>
       </TabContainer>
     </div>
   );
 };
 
-export default RequestMapping;
+export default BuilderMapping;

@@ -23,6 +23,11 @@ const usePagination = (totalItems, itemsPerPage) => {
     }
   };
 
+  const goToPage = (page) => {
+    const newPage = Math.max(1, Math.min(page, totalPages));
+    setCurrentPage(newPage);
+  };
+
   return {
     currentPage,
     totalPages,
@@ -30,6 +35,7 @@ const usePagination = (totalItems, itemsPerPage) => {
     indexOfLastItem,
     goToNextPage,
     goToPreviousPage,
+    goToPage,
   };
 };
 

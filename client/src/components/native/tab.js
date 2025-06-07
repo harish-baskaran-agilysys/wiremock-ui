@@ -2,9 +2,10 @@ import React, { useState } from "react";
 
 export function Tab({ label, size, onClick, active }) {
   let active_styles = active
-    ? "border-b-[3px] border-solid border-sky-600"
+    ? "border-b-[3px] text-sky-600 border-solid border-sky-600"
     : "text-gray-600 font-normal";
-  let sizes = size == "small" ? "h-[22px] text-[12px]" : " ";
+  let sizes = size == "small" ? "h-[22px] text-[12px]" :
+              size =="medium" ? "h-[26px] text-[16px]" : " ";
   return (
     <div
       className={`pb-[8px] px-[20px] ${sizes} ${active_styles}`}
@@ -24,8 +25,8 @@ export function TabContent({ children, active }) {
   );
 }
 
-export function TabContainer({ size, className, children, firstTab }) {
-  const [activeTab, setActiveTab] = useState(firstTab);
+export function TabContainer({ size, className, children, defaultTab }) {
+  const [activeTab, setActiveTab] = useState(defaultTab);
 
   return (
     <div className={`flex flex-col ${className}`}>
