@@ -1,0 +1,1 @@
+Download and place your wiremock standalone server in this folder 
