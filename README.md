@@ -61,4 +61,5 @@ Free to use and contribute.
 
 
 ## Screenshots
+![image](https://github.com/user-attachments/assets/986af864-76b5-473e-a211-6cf23720c0ea)
 
