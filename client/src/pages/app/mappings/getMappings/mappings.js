@@ -4,10 +4,11 @@ import Logo from "wiremock/components/native/logo";
 import DeleteMappings from "./axios/deleteMappings";
 import DuplicateMappings from "./axios/duplicateMappings";
 import { useSession } from "next-auth/react";
+import { getDecryptedUserRole } from "../../utils/roles";
 
 const Mappings = (props) => {
   const { mapping, selected, onSelect, setloadAgain, filter } = props;
-
+  const role = getDecryptedUserRole();
   const { data: session, status } = useSession();
 
   return (
@@ -28,36 +29,40 @@ const Mappings = (props) => {
           <p className="truncate font-bold" key={mapping.id}>
             {mapping.name}
           </p>
-          <div className="flex gap-2">
-            <Logo
-              onClick={async () => {
-                if (
-                  window.confirm(
-                    "Are you sure you want to duplicate this mapping?"
-                  )
-                ) {
-                  await DuplicateMappings(mapping.id, session);
-                  setloadAgain(true);
-                }
-              }}
-              icon="fas fa-copy"
-              className="cursor-pointer text-sky-600 mt-1"
-            />
-            <Logo
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Are you sure you want to delete this mapping?"
-                  )
-                ) {
-                  DeleteMappings(mapping.id);
-                  setloadAgain(true);
-                }
-              }}
-              icon="fas fa-trash"
-              className="cursor-pointer text-red-400 mt-1"
-            />
-          </div>
+          {role !== "viewer" ? (
+            <div className="flex gap-2">
+              <Logo
+                onClick={async () => {
+                  if (
+                    window.confirm(
+                      "Are you sure you want to duplicate this mapping?"
+                    )
+                  ) {
+                    await DuplicateMappings(mapping.id, session);
+                    setloadAgain(true);
+                  }
+                }}
+                icon="fas fa-copy"
+                className="cursor-pointer text-sky-600 mt-1"
+              />
+              <Logo
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Are you sure you want to delete this mapping?"
+                    )
+                  ) {
+                    DeleteMappings(mapping.id);
+                    setloadAgain(true);
+                  }
+                }}
+                icon="fas fa-trash"
+                className="cursor-pointer text-red-400 mt-1"
+              />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
 
         <div className="flex gap-1">

@@ -1,5 +1,5 @@
 import { getDataById, postData } from "wiremock/axios";
-import { cleanStubData } from "../../utils/cleanStub";
+import { cleanStubData } from "../../../utils/cleanStub";
 
 const DuplicateMappings = async (id, session) => {
 

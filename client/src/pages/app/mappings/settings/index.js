@@ -1,13 +1,20 @@
 import SidebarLayout from "../../layout";
-import CategoryInput from "../categoryMappings/categoryInput";
 import { withAuth } from "wiremock/components/withAuth";
+import SettingsTabs from "./paramSelector";
+import { getDecryptedUserRole } from "../../utils/roles";
 
 const SettingsMappings = () => {
+  const role = getDecryptedUserRole();
+
   return (
     <SidebarLayout>
-      <div className="flex flex-col h-[90vh] w-full">
-        <CategoryInput />
-      </div>
+      {role === "admin" ? (
+        <SettingsTabs />
+      ) : (
+        <p className="flex justify-center items-center h-[calc(100vh-250px)] w-full">
+          You are not authorized to view this page...
+        </p>
+      )}
     </SidebarLayout>
   );
 };

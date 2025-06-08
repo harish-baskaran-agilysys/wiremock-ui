@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { extractAndStoreCategoriesFromStubs } from "wiremock/pages/app/mappings/categoryMappings/categoryManager";
-import { getWiremockUrl } from "wiremock/utils/wiremockUrl";
+import { getWiremockUrl } from "wiremock/pages/app/utils/wiremockUrl";
 
 export const getData = async () => {
   const url_wiremock = getWiremockUrl();
@@ -71,6 +71,44 @@ export const deleteData = async (mappingId) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+
+// Get the content of a file from /__admin/files
+export const getFileContent = async (filename) => {
+  const url = `${getWiremockUrl()}/__admin/files/${filename}`;
+  try {
+    const response = await axios.get(url, {
+      headers: { Accept: "application/json" },
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(`Failed to get file: ${error.message}`);
+  }
+};
+
+// Update or create a file using PUT
+export const putFileContent = async (filename, content) => {
+  const url = `${getWiremockUrl()}/__admin/files/${filename}`;
+  try {
+    await axios.put(url, content, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return true;
+  } catch (error) {
+    throw new Error(`Failed to put file: ${error.message}`);
+  }
+};
+
+// Delete a file
+export const deleteFile = async (filename) => {
+  const url = `${getWiremockUrl()}/__admin/files/${filename}`;
+  try {
+    await axios.delete(url);
+    return true;
+  } catch (error) {
+    throw new Error(`Failed to delete file: ${error.message}`);
   }
 };
 

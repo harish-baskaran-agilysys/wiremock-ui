@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { stub } from "wiremock/recoil/atoms";
-import JSONEditor from "../../utils/monaco";
+import JSONEditor from "../../../utils/monaco";
 
 const ResponseFieldMapping = ({ field, id }) => {
   const [reqStub, setReqStub] = useRecoilState(stub);

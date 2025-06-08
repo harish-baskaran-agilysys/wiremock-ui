@@ -5,9 +5,11 @@ import { useRecoilValue } from "recoil";
 import { postData, updateData, updateMapping } from "wiremock/axios";
 import BuilderMapping from "./paramSelector";
 import { useSession } from "next-auth/react";
-import { cleanStubData } from "../utils/cleanStub";
+import { cleanStubData } from "../../utils/cleanStub";
+import { getDecryptedUserRole } from "../../utils/roles";
 
 const PostMappings = (props) => {
+  const role = getDecryptedUserRole();
   const stub = useRecoilValue(postStub);
   const { data: session, status } = useSession();
 
@@ -31,15 +33,19 @@ const PostMappings = (props) => {
       <div className="flex mt-2 justify-between">
         <Header size="large" label="Mapping Detail" className={"pt-1 pb-5"} />
 
-        <div className="flex gap-2 mt-2">
-          <Button
-            icon="fas fa-save"
-            label="Save"
-            type="primary_inverse"
-            className={"p-0"}
-            onClick={() => handleButtonClick()}
-          />
-        </div>
+        {role !== "viewer" ? (
+          <div className="flex gap-2 mt-2">
+            <Button
+              icon="fas fa-save"
+              label="Save"
+              type="primary_inverse"
+              className={"p-0"}
+              onClick={() => handleButtonClick()}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <div className="flex-1 overflow-y-auto px-4">
         <BuilderMapping />

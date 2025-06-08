@@ -1,6 +1,6 @@
 import { Tab, TabContainer } from "wiremock/components/native/tab";
 import Builder from "./details/builder";
-import JSONRepresentation from "../utils/jsonRepresentation";
+import JSONRepresentation from "../../utils/jsonRepresentation";
 
 const BuilderMapping = () => {
   return (

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   addCategory,
   getCategories,
@@ -6,12 +6,13 @@ import {
 } from "./categoryManager";
 import Input from "wiremock/components/native/input";
 import Button from "wiremock/components/native/button";
+import Header from "wiremock/components/native/header";
 
 const CategoryInput = ({ onAdd }) => {
   const [inputValue, setInputValue] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [categoryList, setCategoryList] = useState([]);
 
-  // Load categories on mount
   useEffect(() => {
     refreshCategories();
   }, []);
@@ -39,37 +40,50 @@ const CategoryInput = ({ onAdd }) => {
     refreshCategories();
   };
 
+  const filteredCategories = useMemo(() => {
+    if (!searchTerm.trim()) return categoryList;
+    return categoryList.filter((cat) =>
+      cat.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [searchTerm, categoryList]);
+
   return (
-    <div className="flex flex-col">
-      <div className="flex space-x-2 items-center">
+    <div className="flex flex-col gap-4 p-4 w-[50%]">
+      <Header label="Category Manager" className="text-lg font-bold" />
+
+      <Input
+        placeholder="Search categories"
+        value={searchTerm}
+        setValue={setSearchTerm}
+      />
+
+      <div className="flex gap-2 items-center">
         <Input
-          type="text"
           placeholder="Enter new category"
           value={inputValue}
           setValue={setInputValue}
+          className="w-[500px]"
         />
         <Button onClick={handleSave} label="Save" />
       </div>
 
-      {/* Category List */}
-      <div className="mt-2">
-        <h4 className="text-sm font-semibold mb-1">Saved Categories:</h4>
-        {categoryList.length > 0 ? (
-          <ul className="text-sm list-disc list-inside">
-            {categoryList.map((cat, idx) => (
-              <li key={`${cat}-${idx}`} className="flex gap-4 items-center">
-                <span>{cat}</span>
-                <button
-                  onClick={() => handleDelete(cat)}
-                  className="text-red-500 text-xs hover:underline"
-                >
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
+      <div className="flex flex-col gap-2 mt-2 w-[560px]">
+        {filteredCategories.length > 0 ? (
+          filteredCategories.map((cat, idx) => (
+            <div
+              key={`${cat}-${idx}`}
+              className="flex items-center justify-between border p-2 rounded"
+            >
+              <span>{cat}</span>
+              <Button
+                onClick={() => handleDelete(cat)}
+                type="error"
+                label="Delete"
+              />
+            </div>
+          ))
         ) : (
-          <p className="text-xs text-gray-500">No categories added yet.</p>
+          <p className="text-xs text-gray-500">No categories found.</p>
         )}
       </div>
     </div>

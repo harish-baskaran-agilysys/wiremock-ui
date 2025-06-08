@@ -4,7 +4,7 @@ import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
 import Input from "wiremock/components/native/input";
 import PopupModal from "wiremock/components/native/popup1";
-import { setWiremockUrl, getWiremockUrl } from "wiremock/utils/wiremockUrl";
+import { setWiremockUrl, getWiremockUrl } from "wiremock/pages/app/utils/wiremockUrl";
 
 function CreateServer() {
   const [port, setPort] = useState("");
