@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { getFileContent, putFileContent } from "wiremock/axios";
+import { getFileContent, postFileContent, putFileContent } from "wiremock/axios";
 import Input from "wiremock/components/native/input";
 import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
 import { decryptData, encryptData } from "./roleEncryption";
-import { ROLE_OPTIONS } from "./roles";
+import { LOCAL_STORAGE_ROLE_KEY, ROLE_OPTIONS } from "./roles";
 
 const RoleManager = () => {
   const [roles, setRoles] = useState([]);
@@ -12,21 +12,33 @@ const RoleManager = () => {
   const [newEmail, setNewEmail] = useState("");
   const [newRole, setNewRole] = useState("viewer");
 
-  useEffect(() => {
+ useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const encrypted = await getFileContent("roles.json");
-        const decrypted = decryptData(encrypted);
-        const roleArray = Object.entries(decrypted).map(([email, role]) => ({
-          email,
-          role,
-        }));
-        setRoles(roleArray);
-      } catch (err) {
-        console.error("Failed to fetch roles:", err);
-        setRoles([]);
+        const encrypted = await getFileContent();
+        const decrypted = decryptData(encrypted["roles"]);
+        setRoles(Object.entries(decrypted).map(([email, role]) => ({ email, role })));
+      } catch {
+        console.warn("File fetch failed, trying localStorage...");
+        let stored = localStorage.getItem(LOCAL_STORAGE_ROLE_KEY);
+
+        if (!stored) {
+          console.warn("localStorage empty, initializing with FIRST_USERS...");
+          stored = await initializeDefaultRolesFile();
+        } else {
+          try { await postFileContent({ roles: stored }); } catch {}
+        }
+
+        try {
+          const decrypted = decryptData(stored);
+          setRoles(Object.entries(decrypted).map(([email, role]) => ({ email, role })));
+        } catch (e) {
+          console.error("localStorage decryption failed:", e);
+          setRoles([]);
+        }
       }
     };
+
     fetchRoles();
   }, []);
 
@@ -43,7 +55,8 @@ const RoleManager = () => {
         updatedRoles.map(({ email, role }) => [email, role])
       );
       const encrypted = encryptData(roleObject);
-      await putFileContent("roles.json", encrypted);
+      const data = { "roles" : encrypted }
+      await putFileContent(data);
       setRoles(updatedRoles);
     } catch (err) {
       console.error("Failed to save roles:", err);

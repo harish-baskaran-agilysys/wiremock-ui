@@ -19,6 +19,11 @@ const sidebarConfig = {
       path: "/app/mappings/settings",
       icon: "fas fa-gear",
     },
+     {
+      title: "Swagger",
+      path: "/app/swagger",
+      icon: "fas fa-gear",
+    },
     // {
     //   title: "Set-Folder",
     //   path: "/app/mappings/structureMappings",

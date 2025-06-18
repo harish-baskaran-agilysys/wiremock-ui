@@ -17,33 +17,29 @@ const getNestedValue = (obj, path) =>
 
 const FilteredMappings = ({ mappings, setFilteredMappings }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [categoryLogic, setCategoryLogic] = useState("AND"); // or "OR"
+  const [categoryLogic, setCategoryLogic] = useState("AND");
+  const [notLogic, setNotLogic] = useState(false); // New: NOT toggle
 
-  // Array of filter objects, each with key and text
   const [filters, setFilters] = useState([
     { id: Date.now(), key: "name", text: "" },
   ]);
 
-  // Update one filter's key or text
   const updateFilter = (id, field, value) => {
     setFilters((prev) =>
       prev.map((f) => (f.id === id ? { ...f, [field]: value } : f))
     );
   };
 
-  // Add a new empty filter row
   const addFilter = () => {
     setFilters((prev) => [...prev, { id: Date.now(), key: "name", text: "" }]);
   };
 
-  // Remove a filter row by id
   const removeFilter = (id) => {
     setFilters((prev) => prev.filter((f) => f.id !== id));
   };
 
   const filtered = useMemo(() => {
     return mappings.filter((mapping) => {
-      // TEXT filters (Name, ID, etc.)
       const textMatch = filters.every(({ key, text }) => {
         if (!text) return true;
         const value = getNestedValue(mapping, key);
@@ -53,8 +49,7 @@ const FilteredMappings = ({ mappings, setFilteredMappings }) => {
         );
       });
 
-      // CATEGORY filter logic
-      if (selectedCategories.length === 0) return textMatch;
+      if (selectedCategories.length === 0) return notLogic ? !textMatch : textMatch;
 
       const stubCategories = mapping.metadata?.category || [];
       const categoryMatch =
@@ -62,18 +57,18 @@ const FilteredMappings = ({ mappings, setFilteredMappings }) => {
           ? selectedCategories.every((cat) => stubCategories.includes(cat))
           : selectedCategories.some((cat) => stubCategories.includes(cat));
 
-      return textMatch && categoryMatch;
-    });
-  }, [filters, mappings, selectedCategories, categoryLogic]);
+      const finalMatch = textMatch && categoryMatch;
 
-  // Notify parent of filtered list
+      return notLogic ? !finalMatch : finalMatch; // Apply NOT logic here
+    });
+  }, [filters, mappings, selectedCategories, categoryLogic, notLogic]);
+
   useEffect(() => {
     setFilteredMappings(filtered);
   }, [filtered]);
 
   return (
     <div className="mb-2 flex flex-col gap-2">
-      {/* 🔍 Category-based multi-select filter */}
       <div className="flex gap-2">
         <Button
           label={categoryLogic === "AND" ? "AND" : "OR"}
@@ -82,7 +77,13 @@ const FilteredMappings = ({ mappings, setFilteredMappings }) => {
           }
         />
         <CategoryFilterSelector onChange={setSelectedCategories} />
+        <Button
+          label={notLogic ? "NOT: ON" : "NOT: OFF"} // NOT toggle button
+          onClick={() => setNotLogic((prev) => !prev)}
+          className={notLogic ? "bg-red-400 text-white" : ""}
+        />
       </div>
+
       {filters.map(({ id, key, text }) => (
         <div key={id} className="flex gap-2 items-center">
           <select

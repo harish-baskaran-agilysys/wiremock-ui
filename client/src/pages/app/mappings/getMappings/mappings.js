@@ -5,6 +5,7 @@ import DeleteMappings from "./axios/deleteMappings";
 import DuplicateMappings from "./axios/duplicateMappings";
 import { useSession } from "next-auth/react";
 import { getDecryptedUserRole } from "../../utils/roles";
+import Tooltip from "wiremock/components/native/tooltip";
 
 const Mappings = (props) => {
   const { mapping, selected, onSelect, setloadAgain, filter } = props;
@@ -26,9 +27,13 @@ const Mappings = (props) => {
       ></p>
       <div className="flex-1 flex-col justify-between gap-2" id="">
         <div className="flex justify-between ">
+          <Tooltip message={mapping.name} position="down">
           <p className="truncate font-bold" key={mapping.id}>
-            {mapping.name}
+            {mapping.name.length > 40
+              ? `${mapping.name.slice(0, 40)}...`
+              : mapping.name}
           </p>
+          </Tooltip>
           {role !== "viewer" ? (
             <div className="flex gap-2">
               <Logo
