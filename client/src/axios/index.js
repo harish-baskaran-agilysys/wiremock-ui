@@ -114,7 +114,7 @@ export const postFileContent = async (content) => {
     });
     return true;
   } catch (error) {
-    throw new Error(`Failed to put file: ${error.message}`);
+    console.log(`Failed to put file: ${error.message}`);
   }
 };
 
