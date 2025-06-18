@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { fontSize, typeColor } from "../configuration/config"
 import Logo from "../native/logo";
 import Button from "../native/button";
+import Header from "../native/header";
 
 const container_styles = (isCollapsed) =>
   `bg-sky-600 h-[calc(100vh-120px)] border-r-2 rounded-lg border-gray-300 transition-all duration-300 overflow-auto  ${
@@ -82,6 +83,7 @@ const Sidebar = (props) => {
   };
 
   return (
+    <div>
     <div className={`${container_styles(isCollapsed)}`}>
       <div
         className={` ${
@@ -172,6 +174,8 @@ const Sidebar = (props) => {
           </React.Fragment>
         ))}
       </ul>
+      </div>
+      <Header className="text-center mt-4 mb-2" label="Harish Baskaran"/>
     </div>
   );
 };

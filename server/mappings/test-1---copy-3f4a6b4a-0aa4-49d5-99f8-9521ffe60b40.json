@@ -18,9 +18,9 @@
   "metadata" : {
     "author" : "harish-baskaran-agilysys",
     "folder" : "",
-    "category" : [ ],
+    "category" : [ "comtrol", "loyalty" ],
     "author_email" : "harish.baskaran1@agilysys.com",
     "lastUpdatedBy_email" : "harish.baskaran1@agilysys.com"
   },
-  "insertionIndex" : 11
+  "insertionIndex" : 0
 }
