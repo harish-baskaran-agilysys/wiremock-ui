@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { fontSize, typeColor } from "../configuration/config"
+import { fontSize, typeColor } from "../configuration/config";
 import Logo from "../native/logo";
 import Button from "../native/button";
 import Header from "../native/header";
@@ -83,86 +83,90 @@ const Sidebar = (props) => {
   };
 
   return (
-    <div>
-    <div className={`${container_styles(isCollapsed)}`}>
-      <div
-        className={` ${
-          isCollapsed ? "" : "ml-10 "
-        } mt-4 mb-3 flex gap-2 justify-around`}
-      >
-        {props.companyIcon && (
-          <Logo
-            icon={props.companyIcon}
-            className={` mt-[10px] ${
-              isCollapsed ? "" : "mr-5 "
-            } ${icon_styles}`}
-          />
-        )}
-        {!isCollapsed && props.companyName && (
-          <p className={` ${cname_styles} ${type} ${props.className}`}>
-            {props.companyName}
-          </p>
-        )}
-        {props.companyIcon || props.companyName &&
-        <Button
-          onClick={toggleSidebar}
-          type="info"
-          className="!p-1 !m-0"
-          label={isCollapsed ? ">" : "<"}
-        />
-        }
-      </div>
+    <div className="flex flex-col justofy-between">
+      <div className={`${container_styles(isCollapsed)}`}>
+        <div
+          className={` ${
+            isCollapsed ? "" : "ml-10 "
+          } mt-4 mb-3 flex gap-2 justify-around`}
+        >
+          {props.companyIcon && (
+            <Logo
+              icon={props.companyIcon}
+              className={` mt-[10px] ${
+                isCollapsed ? "" : "mr-5 "
+              } ${icon_styles}`}
+            />
+          )}
+          {!isCollapsed && props.companyName && (
+            <p className={` ${cname_styles} ${type} ${props.className}`}>
+              {props.companyName}
+            </p>
+          )}
+          {props.companyIcon ||
+            (props.companyName && (
+              <Button
+                onClick={toggleSidebar}
+                type="info"
+                className="!p-1 !m-0"
+                label={isCollapsed ? ">" : "<"}
+              />
+            ))}
+        </div>
 
-      <ul className={`${ul_styles}`}>
-        {props.menuItems.map((item, index) => (
-          <React.Fragment key={`menu-item-fragment-${index}`}>
-            <li
-              key={`menu-item-${index}`}
-              className={getClassNames(item.path, `${li_styles(isCollapsed)}`)}
-            >
-              {renderLogo(item, isCollapsed)}
+        <ul className={`${ul_styles}`}>
+          {props.menuItems.map((item, index) => (
+            <React.Fragment key={`menu-item-fragment-${index}`}>
+              <li
+                key={`menu-item-${index}`}
+                className={getClassNames(
+                  item.path,
+                  `${li_styles(isCollapsed)}`
+                )}
+              >
+                {renderLogo(item, isCollapsed)}
 
-              {!item.subMenu ? (
-                <div
-                  className={`${
-                    isCollapsed
-                      ? "invisible absolute overflow-hidden w-0 h-0 m-0 p-0 border-0"
-                      : ""
-                  }`}
-                >
-                  {renderLink(item, size, type)}
-                </div>
-              ) : (
-                !isCollapsed && (
-                  <>
-                    <span
-                      className={getClassNames(
-                        item.path,
-                        span_styles,
-                        `${fontSize(props.size)} ${typeColor(
-                          props.type
-                        )} !w-[70%]`
-                      )}
-                    >
-                      {item.title}
-                    </span>
-                    <button
-                      className="ml-2 text-sm text-white justify-last"
-                      onClick={() => toggleSubMenu(index)}
-                    >
-                      {expandedSubMenus[index] ? "▲" : "▼"}
-                    </button>
-                  </>
-                )
+                {!item.subMenu ? (
+                  <div
+                    className={`${
+                      isCollapsed
+                        ? "invisible absolute overflow-hidden w-0 h-0 m-0 p-0 border-0"
+                        : ""
+                    }`}
+                  >
+                    {renderLink(item, size, type)}
+                  </div>
+                ) : (
+                  !isCollapsed && (
+                    <>
+                      <span
+                        className={getClassNames(
+                          item.path,
+                          span_styles,
+                          `${fontSize(props.size)} ${typeColor(
+                            props.type
+                          )} !w-[70%]`
+                        )}
+                      >
+                        {item.title}
+                      </span>
+                      <button
+                        className="ml-2 text-sm text-white justify-last"
+                        onClick={() => toggleSubMenu(index)}
+                      >
+                        {expandedSubMenus[index] ? "▲" : "▼"}
+                      </button>
+                    </>
+                  )
+                )}
+              </li>
+              {!isCollapsed && item.subMenu && (
+                <React.Fragment key={`submenu-fragment-${index}`}>
+                  {expandedSubMenus[index] && renderSubMenu(item.subMenu)}
+                </React.Fragment>
               )}
-            </li>
-            {!isCollapsed && item.subMenu && (
-              <React.Fragment key={`submenu-fragment-${index}`}>
-                {expandedSubMenus[index] && renderSubMenu(item.subMenu)}
-              </React.Fragment>
-            )}
 
-            {/* <PopupModal
+              {/* <PopupModal
               flag={isCollapsed}
               containerStyles="bg-sky-600 !pt-1 !pb-2 !pl-0"
             >
@@ -171,11 +175,11 @@ const Sidebar = (props) => {
                 <>{expandedSubMenus[index] && renderSubMenu(item.subMenu)}</>
               )}
             </PopupModal> */}
-          </React.Fragment>
-        ))}
-      </ul>
+            </React.Fragment>
+          ))}
+        </ul>
       </div>
-      <Header className="text-center mt-4 mb-2" label="Harish Baskaran"/>
+      <Header className="mb-1" label="by - Harish Baskaran" />
     </div>
   );
 };
