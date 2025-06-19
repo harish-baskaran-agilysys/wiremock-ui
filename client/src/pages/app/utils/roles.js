@@ -48,6 +48,11 @@ export const initializeUserRole = async (email) => {
 export const getDecryptedUserRole = () => {
   const defaultValue = "admin";
 
+   if (typeof window === 'undefined') {
+    // Running on server - localStorage not available
+    return defaultValue;
+  }
+  
   const encrypted = localStorage.getItem(LOCAL_STORAGE_ROLE_KEY);
   if (!encrypted) return defaultValue; // default fallback
 

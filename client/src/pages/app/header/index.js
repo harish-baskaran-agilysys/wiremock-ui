@@ -19,7 +19,7 @@ const HeaderMapping = () => {
       <Header
         className="flex justify-center items-center"
         size="large"
-        label={`Welcome, ${session.user.name}`}
+        label={`Welcome, ${session?.user?.name || 'Guest'}`}
       />
 
       <div className="flex gap-2">

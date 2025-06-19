@@ -41,17 +41,17 @@ export const cleanStubData = (stub, session) => {
     !cleanedStub.metadata.author ||
     cleanedStub.metadata.author.trim() === ""
   ) {
-    cleanedStub.metadata.author = session.user.name;
+    cleanedStub.metadata.author = session?.user?.name || 'Guest';
   }
 
   if (
     !cleanedStub.metadata.author_email ||
     cleanedStub.metadata.author_email.trim() === ""
   ) {
-    cleanedStub.metadata.author_email = session.user.email;
+    cleanedStub.metadata.author_email = session?.user?.email || 'Guest@test.com';
   }
 
-  cleanedStub.metadata.lastUpdatedBy_email = session.user.email;
+  cleanedStub.metadata.lastUpdatedBy_email = session?.user?.email || 'Guest@test.com';
 
   return cleanedStub;
 };
