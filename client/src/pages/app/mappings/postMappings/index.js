@@ -2,7 +2,7 @@ import Header from "wiremock/components/native/header";
 import Button from "wiremock/components/native/button";
 import { postStub } from "wiremock/recoil/selectors";
 import { useRecoilValue } from "recoil";
-import { postData, updateData, updateMapping } from "wiremock/axios";
+import { getData, postData, updateData, updateMapping } from "wiremock/axios";
 import BuilderMapping from "./paramSelector";
 import { useSession } from "next-auth/react";
 import { cleanStubData } from "../../utils/cleanStub";
@@ -22,6 +22,7 @@ const PostMappings = (props) => {
         await postData(cleanedStub);
       }
       props.setNewMapping(false);
+      props.setIsPostMappingsVisible(false);
       props.setloadAgain(true);
     } catch (error) {
       console.log(error);

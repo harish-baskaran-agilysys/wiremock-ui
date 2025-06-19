@@ -12,7 +12,6 @@ import { persistData } from "wiremock/axios";
 
 const GetMappings = (props) => {
   const [responseData, setResponseData] = useState("");
-  const [selectedMappingId, setSelectedMappingId] = useState(null);
   const [stubState, setStubState] = useRecoilState(stub);
   const [filteredMappings, setFilteredMappings] = useState([]);
   const [filter, setFilter] = useState(false);
@@ -22,6 +21,7 @@ const GetMappings = (props) => {
     setStubState(mapping); // populate entire mapping into the stub
     props.setSelectedMappingId(mapping.id);
     props.setNewMapping(false);
+    props.setIsPostMappingsVisible(true);
   };
 
   useEffect(() => {
@@ -82,6 +82,7 @@ const GetMappings = (props) => {
             onClick={() => {
               props.setNewMapping(true);
               setStubState(defaultStub);
+              props.setIsPostMappingsVisible(true);
             }}
           />
         </div>
@@ -105,10 +106,9 @@ const GetMappings = (props) => {
               key={mapping.id}
               mapping={mapping}
               setloadAgain={props.setloadAgain}
-              selected={selectedMappingId === mapping.id}
+              selected={props.selectedMappingId === mapping.id}
               filter={filter}
               onSelect={() => {
-                setSelectedMappingId(mapping.id);
                 handleSelectMapping(mapping);
               }}
             />
