@@ -1,6 +1,7 @@
 import { Tab, TabContainer } from "wiremock/components/native/tab";
 import CategoryInput from "../categoryMappings/categoryInput";
 import RoleManager from "../../utils/roleManager";
+import Header from "wiremock/components/native/header";
 
 const SettingsTabs = () => {
   return (
@@ -10,7 +11,11 @@ const SettingsTabs = () => {
           <CategoryInput />
         </Tab>
         <Tab label="Roles">
-          <RoleManager />
+          {process.env.NEXT_PUBLIC_ENABLE_AUTH === "true" ? (
+            <RoleManager />
+          ) : (
+            <Header label="The Auth is disabled" />
+          )}
         </Tab>
       </TabContainer>
     </div>
