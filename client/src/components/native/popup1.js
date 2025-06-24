@@ -23,6 +23,7 @@ const PopupModal = (props) => {
     labelClassName,
     logoClassName,
     buttonLabel,
+    buttonType,
   } = props;
   return (
     <div>
@@ -111,7 +112,7 @@ const PopupModal = (props) => {
         </div>
       ) : (
         <Button
-          type="primary_inverse"
+          type={buttonType ? buttonType : "primary_inverse"}
           label={buttonLabel}
           className={`ml-[20px] ${labelClassName}`}
           onClick={open}

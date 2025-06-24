@@ -6,7 +6,7 @@ import Header from "wiremock/components/native/header";
 const SettingsTabs = () => {
   return (
     <div id="request-specification" className="mt-3">
-      <TabContainer size="small" defaultTab={1}>
+      <TabContainer size="small" defaultTab={0}>
         <Tab label="Categories">
           <CategoryInput />
         </Tab>

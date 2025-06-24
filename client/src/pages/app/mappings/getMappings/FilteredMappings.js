@@ -4,12 +4,12 @@ import Logo from "wiremock/components/native/logo";
 import CategoryFilterSelector from "./CategoryFilterSelector"; // adjust path
 
 const SEARCH_KEYS = [
-  { label: "Name", value: "name" },
-  { label: "ID", value: "id" },
   { label: "URL Path", value: "request.urlPath" },
   { label: "Author", value: "metadata.author" },
   { label: "Author Email", value: "metadata.author_email" },
   { label: "Last Updated By Email", value: "metadata.lastUpdatedBy_email" },
+  { label: "ID", value: "id" },
+  { label: "Name", value: "name" },
 ];
 
 const getNestedValue = (obj, path) =>
@@ -21,7 +21,7 @@ const FilteredMappings = ({ mappings, setFilteredMappings }) => {
   const [notLogic, setNotLogic] = useState(false); // New: NOT toggle
 
   const [filters, setFilters] = useState([
-    { id: Date.now(), key: "name", text: "" },
+    { id: Date.now(), key: "request.urlPath", text: "" },
   ]);
 
   const updateFilter = (id, field, value) => {
@@ -31,37 +31,60 @@ const FilteredMappings = ({ mappings, setFilteredMappings }) => {
   };
 
   const addFilter = () => {
-    setFilters((prev) => [...prev, { id: Date.now(), key: "name", text: "" }]);
+    setFilters((prev) => [
+      ...prev,
+      { id: Date.now(), key: "request.urlPath", text: "" },
+    ]);
   };
 
   const removeFilter = (id) => {
     setFilters((prev) => prev.filter((f) => f.id !== id));
   };
 
+  const [filterLogic, setFilterLogic] = useState("AND"); // or "OR"
+
   const filtered = useMemo(() => {
     return mappings.filter((mapping) => {
-      const textMatch = filters.every(({ key, text }) => {
-        if (!text) return true;
-        const value = getNestedValue(mapping, key);
-        return (
-          typeof value === "string" &&
-          value.toLowerCase().includes(text.toLowerCase())
-        );
-      });
-
-      if (selectedCategories.length === 0) return notLogic ? !textMatch : textMatch;
+      const textMatch =
+        filterLogic === "AND"
+          ? filters.every(({ key, text }) => {
+              if (!text) return true;
+              const value = getNestedValue(mapping, key);
+              return (
+                typeof value === "string" &&
+                value.toLowerCase().includes(text.toLowerCase())
+              );
+            })
+          : filters.some(({ key, text }) => {
+              if (!text) return false;
+              const value = getNestedValue(mapping, key);
+              return (
+                typeof value === "string" &&
+                value.toLowerCase().includes(text.toLowerCase())
+              );
+            });
 
       const stubCategories = mapping.metadata?.category || [];
+
       const categoryMatch =
-        categoryLogic === "AND"
+        selectedCategories.length === 0
+          ? true
+          : categoryLogic === "AND"
           ? selectedCategories.every((cat) => stubCategories.includes(cat))
           : selectedCategories.some((cat) => stubCategories.includes(cat));
 
       const finalMatch = textMatch && categoryMatch;
 
-      return notLogic ? !finalMatch : finalMatch; // Apply NOT logic here
+      return notLogic ? !finalMatch : finalMatch;
     });
-  }, [filters, mappings, selectedCategories, categoryLogic, notLogic]);
+  }, [
+    filters,
+    mappings,
+    selectedCategories,
+    categoryLogic,
+    notLogic,
+    filterLogic,
+  ]);
 
   useEffect(() => {
     setFilteredMappings(filtered);
@@ -70,18 +93,28 @@ const FilteredMappings = ({ mappings, setFilteredMappings }) => {
   return (
     <div className="mb-2 flex flex-col gap-2">
       <div className="flex gap-2">
-        <Button
-          label={categoryLogic === "AND" ? "AND" : "OR"}
-          onClick={() =>
-            setCategoryLogic((prev) => (prev === "AND" ? "OR" : "AND"))
-          }
-        />
+        <div className="flex flex-col gap-2">
+          <Button
+            label={categoryLogic === "AND" ? "AND Categories" : "OR Categories"}
+            onClick={() =>
+              setCategoryLogic((prev) => (prev === "AND" ? "OR" : "AND"))
+            }
+          />
+          <div className="flex gap-2">
+            <Button
+              label={notLogic ? "NOT: ON" : "NOT: OFF"} // NOT toggle button
+              onClick={() => setNotLogic((prev) => !prev)}
+              className={notLogic ? "bg-red-400 text-white" : ""}
+            />
+            <Button
+              label={filterLogic === "AND" ? "AND Filters" : "OR Filters"}
+              onClick={() =>
+                setFilterLogic((prev) => (prev === "AND" ? "OR" : "AND"))
+              }
+            />
+          </div>
+        </div>
         <CategoryFilterSelector onChange={setSelectedCategories} />
-        <Button
-          label={notLogic ? "NOT: ON" : "NOT: OFF"} // NOT toggle button
-          onClick={() => setNotLogic((prev) => !prev)}
-          className={notLogic ? "bg-red-400 text-white" : ""}
-        />
       </div>
 
       {filters.map(({ id, key, text }) => (

@@ -25,7 +25,8 @@
     "react": "^18",
     "react-dom": "^18",
     "recoil": "^0.7.7",
-    "swagger-ui-react": "^5.24.1"
+    "swagger-ui-react": "^5.24.1",
+    "vkbeautify": "^0.99.3"
   },
   "devDependencies": {
     "@types/node": "22.15.27",

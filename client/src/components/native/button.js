@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { fontSize, typeColor } from "../configuration/config";
 import Logo from "./logo";
 
@@ -6,7 +7,7 @@ py-2 mr-1 rounded
 ease-linear transition-all duration-150 flex gap-2 justify-between align-center 
 `;
 
-const Button = (props) => {
+const Button = forwardRef((props, ref)  => {
   let size = fontSize(props.size);
   let type = typeColor(props.type);
 
@@ -16,6 +17,8 @@ const Button = (props) => {
         type="button"
         className={`${styles} ${size} ${type} ${props.className} ${props.label ? "" : "rounded-full"} ${props.end_icon ? "pl-3" : "px-3"}`}
         onClick={props.onClick}
+        disabled={props.disabled}
+        ref={ref}
       >
         {props.icon && (
           <Logo
@@ -34,7 +37,7 @@ const Button = (props) => {
       </button>
     </div>
   );
-};
+});
 
 export default Button;
 /* 

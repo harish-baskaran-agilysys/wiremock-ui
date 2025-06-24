@@ -43,6 +43,13 @@ const PostMappings = (props) => {
               className={"p-0"}
               onClick={() => handleButtonClick()}
             />
+            <Button
+              icon="fas fa-circle-xmark"
+              label="Cancel"
+              type="primary_link"
+              className={"p-0"}
+              onClick={() => props.setIsPostMappingsVisible(false)}
+            />
           </div>
         ) : (
           <></>
