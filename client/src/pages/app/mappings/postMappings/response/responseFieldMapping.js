@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { stub } from "wiremock/recoil/atoms";
-import JSONEditor from "../../../utils/monaco";
+import JSONEditor, { detectLanguage } from "../../../utils/monaco";
 
 const ResponseFieldMapping = ({ field, id }) => {
   const [reqStub, setReqStub] = useRecoilState(stub);
@@ -16,12 +16,24 @@ const ResponseFieldMapping = ({ field, id }) => {
       return;
     }
 
-    try {
-      const body = reqStub.response?.[field];
-      const parsed = typeof body === "string" ? JSON.parse(body) : body;
-      setInputText(JSON.stringify(parsed || {}, null, 2));
-    } catch (e) {
-      setInputText("{}");
+    const body = reqStub.response?.[field];
+
+    if (typeof body === "string") {
+      const language = detectLanguage(body);
+      if (language === "xml") {
+        setInputText(body);
+      } else {
+        try {
+          const parsed = JSON.parse(body);
+          setInputText(JSON.stringify(parsed, null, 2));
+        } catch (e) {
+          setInputText(body); // fallback
+        }
+      }
+    } else if (typeof body === "object") {
+      setInputText(JSON.stringify(body, null, 2));
+    } else {
+      setInputText(body ?? "");
     }
   }, [reqStub, field]);
 
@@ -31,32 +43,45 @@ const ResponseFieldMapping = ({ field, id }) => {
       return;
     }
 
-    try {
-      const parsed =
-        typeof inputText === "string" ? JSON.parse(inputText) : inputText;
+    isUserEdit.current = true;
+    const lang = detectLanguage(inputText);
 
-      isUserEdit.current = true;
+    setReqStub((prev) => {
+      let newFieldValue;
 
       if (field === "body") {
-        // For "body" just save the raw string directly
-        isUserEdit.current = true;
-        setReqStub((prev) => ({
-          ...prev,
-          response: {
-            ...prev.response,
-            [field]: inputText,
-          },
-        }));
+        // For body, always store as a string
+        if (lang === "json") {
+          try {
+            const parsed = JSON.parse(inputText);
+            newFieldValue = JSON.stringify(parsed); // save as stringified JSON
+          } catch {
+            newFieldValue = inputText; // fallback
+          }
+        } else {
+          newFieldValue = inputText; // XML or plaintext as-is
+        }
       } else {
-        setReqStub((prev) => ({
-          ...prev,
-          response: {
-            ...prev.response,
-            [field]: parsed,
-          },
-        }));
+        // For headers, jsonBody, etc., store as an object if JSON, else as-is
+        if (lang === "json") {
+          try {
+            newFieldValue = JSON.parse(inputText); // store as real object
+          } catch {
+            newFieldValue = inputText; // fallback
+          }
+        } else {
+          newFieldValue = inputText;
+        }
       }
-    } catch (e) {}
+
+      return {
+        ...prev,
+        response: {
+          ...prev.response,
+          [field]: newFieldValue,
+        },
+      };
+    });
   }, [inputText, field]);
 
   return (
