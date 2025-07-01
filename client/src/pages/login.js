@@ -4,18 +4,28 @@ import { useEffect } from "react";
 import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
 import { initializeUserRole } from "./app/utils/roles";
+import { enableAuth } from "wiremock/components/withAuth";
 
 export default function LoginPage() {
   const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
+    if (!enableAuth) {
+      router.replace("/manual-login");
+      return;
+    }
+
     if (session?.user?.email) {
       initializeUserRole(session.user.email).then(() => {
         router.push("/app/mappings");
       });
     }
   }, [session]);
+
+  if (!enableAuth) {
+    return null; // Prevent rendering before redirect
+  }
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">

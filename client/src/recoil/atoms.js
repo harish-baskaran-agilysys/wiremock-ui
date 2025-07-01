@@ -1,4 +1,4 @@
-// wiremock/recoil/atoms.js
+// recoil/atoms.js
 import { atom } from "recoil";
 
 export const defaultStub = {
@@ -26,4 +26,14 @@ export const defaultStub = {
 export const stub = atom({
   key: "stub",
   default: defaultStub,
+});
+
+export const sessionAtom = atom({
+  key: "sessionAtom",
+  default: {
+    user: {
+      name: "",
+      email: ""
+    }
+  }
 });

@@ -8,7 +8,7 @@ import { getDecryptedUserRole } from "../../utils/roles";
 import Tooltip from "wiremock/components/native/tooltip";
 
 const Mappings = (props) => {
-  const { mapping, selected, onSelect, setloadAgain, filter } = props;
+  const { mapping, selected, onSelect, setloadAgain, setIsPostMappingsVisible, filter } = props;
   const role = getDecryptedUserRole();
   const { data: session, status } = useSession();
 
@@ -45,20 +45,22 @@ const Mappings = (props) => {
                   ) {
                     await DuplicateMappings(mapping.id, session);
                     setloadAgain(true);
+                    setIsPostMappingsVisible(false);
                   }
                 }}
                 icon="fas fa-copy"
                 className="cursor-pointer text-sky-600 mt-1"
               />
               <Logo
-                onClick={() => {
+                onClick={async () => {
                   if (
                     window.confirm(
                       "Are you sure you want to delete this mapping?"
                     )
                   ) {
-                    DeleteMappings(mapping.id);
+                    await DeleteMappings(mapping.id);
                     setloadAgain(true);
+                    setIsPostMappingsVisible(false);
                   }
                 }}
                 icon="fas fa-trash"

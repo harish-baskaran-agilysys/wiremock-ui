@@ -11,7 +11,6 @@ function App() {
 
   const [isPostMappingsVisible, setIsPostMappingsVisible] = useState(false);
 
-
   return (
     <SidebarLayout>
       <div className="flex flex-row gap-2">
@@ -20,6 +19,7 @@ function App() {
             setNewMapping={setNewMapping}
             loadAgain={loadAgain}
             setloadAgain={setloadAgain}
+            isPostMappingsVisible={isPostMappingsVisible}
             setIsPostMappingsVisible={setIsPostMappingsVisible}
             selectedMappingId={selectedMappingId}
             setSelectedMappingId={setSelectedMappingId}

@@ -6,7 +6,6 @@ import { useRecoilState } from "recoil";
 import { defaultStub, stub } from "wiremock/recoil/atoms";
 import FilteredMappings from "./FilteredMappings";
 import Logo from "wiremock/components/native/logo";
-import { persistData } from "wiremock/axios";
 import usePagination from "../../utils/usePagination";
 import PaginationControl from "../../utils/PaginationControl";
 
@@ -101,6 +100,7 @@ const GetMappings = (props) => {
               key={mapping.id}
               mapping={mapping}
               setloadAgain={props.setloadAgain}
+              setIsPostMappingsVisible={props.setIsPostMappingsVisible}
               selected={props.selectedMappingId === mapping.id}
               filter={filter}
               onSelect={() => handleSelectMapping(mapping)}

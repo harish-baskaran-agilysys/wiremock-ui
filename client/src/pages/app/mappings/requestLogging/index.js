@@ -4,6 +4,7 @@ import Header from "wiremock/components/native/header";
 import SidebarLayout from "../../layout";
 import Button from "wiremock/components/native/button";
 import { withAuth } from "wiremock/components/withAuth";
+import PopupModal from "wiremock/components/native/popup1";
 
 const RequestLogChecker = () => {
 
@@ -105,7 +106,7 @@ const RequestLogChecker = () => {
             >
               <h4>Request {logs.length - index}</h4>
               <pre>URL: {log.request.url}</pre>
-              <pre>Method: {log.request.method}</pre>
+              <pre>Method: {log.request.method}   Status: {log.response.status}</pre>
               {expandedLog === index && (
                 <div style={{ marginTop: "10px" }}>
                   <pre>Client IP: {log.request.clientIp}</pre>

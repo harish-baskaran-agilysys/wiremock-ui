@@ -5,11 +5,11 @@ import CategoryFilterSelector from "./CategoryFilterSelector"; // adjust path
 
 const SEARCH_KEYS = [
   { label: "URL Path", value: "request.urlPath" },
-  { label: "Author", value: "metadata.author" },
-  { label: "Author Email", value: "metadata.author_email" },
-  { label: "Last Updated By Email", value: "metadata.lastUpdatedBy_email" },
-  { label: "ID", value: "id" },
   { label: "Name", value: "name" },
+  { label: "Author Email", value: "metadata.author_email" },
+  { label: "Last Updated Email", value: "metadata.lastUpdatedBy_email" },
+  { label: "Author Name", value: "metadata.author" },
+  { label: "ID", value: "id" },
 ];
 
 const getNestedValue = (obj, path) =>
