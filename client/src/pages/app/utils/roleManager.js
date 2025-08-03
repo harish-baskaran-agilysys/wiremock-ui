@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import bcrypt from "bcryptjs";
 import { getFileContent, postFileContent, putFileContent } from "wiremock/axios";
 import Input from "wiremock/components/native/input";
 import Button from "wiremock/components/native/button";
@@ -11,13 +12,21 @@ const RoleManager = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newRole, setNewRole] = useState("viewer");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordInputs, setPasswordInputs] = useState({}); // Track password input per user
 
- useEffect(() => {
+  useEffect(() => {
     const fetchRoles = async () => {
       try {
         const encrypted = await getFileContent();
         const decrypted = decryptData(encrypted["roles"]);
-        setRoles(Object.entries(decrypted).map(([email, role]) => ({ email, role })));
+        setRoles(
+          Object.entries(decrypted).map(([email, data]) => ({
+            email,
+            role: data.role,
+            password: data.password,
+          }))
+        );
       } catch {
         console.warn("File fetch failed, trying localStorage...");
         let stored = localStorage.getItem(LOCAL_STORAGE_ROLE_KEY);
@@ -26,12 +35,20 @@ const RoleManager = () => {
           console.warn("localStorage empty, initializing with FIRST_USERS...");
           stored = await initializeDefaultRolesFile();
         } else {
-          try { await postFileContent({ roles: stored }); } catch {}
+          try {
+            await postFileContent({ roles: stored });
+          } catch {}
         }
 
         try {
           const decrypted = decryptData(stored);
-          setRoles(Object.entries(decrypted).map(([email, role]) => ({ email, role })));
+          setRoles(
+            Object.entries(decrypted).map(([email, data]) => ({
+              email,
+              role: data.role,
+              password: data.password,
+            }))
+          );
         } catch (e) {
           console.error("localStorage decryption failed:", e);
           setRoles([]);
@@ -52,10 +69,13 @@ const RoleManager = () => {
   const saveRoles = async (updatedRoles) => {
     try {
       const roleObject = Object.fromEntries(
-        updatedRoles.map(({ email, role }) => [email, role])
+        updatedRoles.map(({ email, role, password }) => [
+          email,
+          { role, password },
+        ])
       );
       const encrypted = encryptData(roleObject);
-      const data = { "roles" : encrypted }
+      const data = { roles: encrypted };
       await putFileContent(data);
       setRoles(updatedRoles);
     } catch (err) {
@@ -65,10 +85,17 @@ const RoleManager = () => {
 
   const handleAdd = () => {
     if (!newEmail || roles.some((r) => r.email === newEmail)) return;
-    const updated = [...roles, { email: newEmail, role: newRole }];
+
+    const hashedPassword = bcrypt.hashSync(newPassword || "", 10);
+
+    const updated = [
+      ...roles,
+      { email: newEmail, role: newRole, password: hashedPassword },
+    ];
     saveRoles(updated);
     setNewEmail("");
     setNewRole("viewer");
+    setNewPassword("");
   };
 
   const updateRole = (email, newRole) => {
@@ -82,13 +109,29 @@ const RoleManager = () => {
     saveRoles(updated);
   };
 
-  const handleRemove = (email) => {
-    const updated = roles.filter((r) => r.email !== email);
+  // Update password only when Update button is clicked
+  const updatePassword = (email) => {
+    const newPassword = passwordInputs[email];
+    if (!newPassword || newPassword.trim() === "") {
+      // ignore empty input
+      return;
+    }
+    const hashedPassword = bcrypt.hashSync(newPassword, 10);
+    const updated = roles.map((r) =>
+      r.email === email ? { ...r, password: hashedPassword } : r
+    );
     saveRoles(updated);
+    // Clear input after update
+    setPasswordInputs((prev) => ({ ...prev, [email]: "" }));
   };
 
+  const handleRemove = (email) => {
+  const updated = roles.filter((r) => r.email !== email);
+  saveRoles(updated);
+};
+
   return (
-    <div className="flex flex-col gap-4 p-4 w-[50%]">
+    <div className="flex flex-col gap-4 p-4 ">
       <Header label="Role Manager" className="text-lg font-bold" />
 
       <Input
@@ -102,7 +145,14 @@ const RoleManager = () => {
           placeholder="New member email"
           value={newEmail}
           setValue={setNewEmail}
-          className="w-[550px]"
+          className="w-[350px]"
+        />
+        <Input
+          placeholder="Password"
+          type="password"
+          value={newPassword}
+          setValue={setNewPassword}
+          className="w-[200px]"
         />
         <select
           value={newRole}
@@ -137,6 +187,26 @@ const RoleManager = () => {
                   </option>
                 ))}
               </select>
+
+              <input
+                type="password"
+                placeholder="Change password"
+                className="w-[200px] border rounded p-1"
+                value={passwordInputs[user.email] || ""}
+                onChange={(e) =>
+                  setPasswordInputs((prev) => ({
+                    ...prev,
+                    [user.email]: e.target.value,
+                  }))
+                }
+              />
+
+              <Button
+                label="Update"
+                onClick={() => updatePassword(user.email)}
+                disabled={!passwordInputs[user.email]}
+              />
+
               <Button
                 label="Remove"
                 onClick={() => handleRemove(user.email)}

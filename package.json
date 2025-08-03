@@ -12,6 +12,7 @@
         "nodemon": "^2.0.22"
     },
     "dependencies": {
+        "bcryptjs": "^3.0.2",
         "cors": "^2.8.5",
         "express": "^4.19.2",
         "kill-port-process": "^3.2.1",

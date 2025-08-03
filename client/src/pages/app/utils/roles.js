@@ -1,12 +1,22 @@
-import { getFileContent, postFileContent, putFileContent } from "wiremock/axios";
+import {
+  getFileContent,
+  postFileContent,
+  putFileContent,
+} from "wiremock/axios";
 import { decryptData, encryptData } from "./roleEncryption";
+import bcrypt from "bcryptjs";
 
 export const LOCAL_STORAGE_ROLE_KEY = "user-role-encrypted";
 const ENCRYPTION_KEY = "staywiremock-secret";
 const FIRST_USERS = {
-  "satishnath.siddha@agilysys.com": "admin",
-  "mohanraj.kesavan@agilysys.com": "admin",
-  "harish.baskaran1@agilysys.com": "admin",
+  "mohanraj.kesavan@agilysys.com": {
+    role: "admin",
+    password: bcrypt.hashSync("password", 10),
+  },
+  "harish.baskaran1@agilysys.com": {
+    role: "admin",
+    password: bcrypt.hashSync("password", 10),
+  },
 };
 
 export const ROLE_OPTIONS = ["admin", "editor", "viewer"];
@@ -18,41 +28,46 @@ export const initializeDefaultRolesFile = async () => {
   return encryptedDefault;
 };
 
-export const initializeUserRole = async (email) => {
+export const initializeUserRole = async (email, password) => {
   try {
     let fileContent;
 
     try {
       const getData = await getFileContent();
-      fileContent = getData['roles']
+      // fileContent = await initializeDefaultRolesFile();
+      // console.log(fileContent);
+      fileContent = getData["roles"];
     } catch (error) {
       console.warn("Roles file not found, creating default.");
       fileContent = await initializeDefaultRolesFile();
     }
 
     const rolesJson = decryptData(fileContent, ENCRYPTION_KEY);
-    const role = rolesJson[email];
+    const userData = rolesJson[email];
 
-    if (role) {
-      const encryptedRole = encryptData(role, ENCRYPTION_KEY);
+    if (userData && bcrypt.compareSync(password, userData.password)) {
+      const encryptedRole = encryptData(userData.role, ENCRYPTION_KEY);
       localStorage.setItem(LOCAL_STORAGE_ROLE_KEY, encryptedRole);
       console.log("User role stored securely");
+      return true;
     } else {
-      console.warn("No role found for this user in roles file: " + email);
+      console.warn("Invalid credentials for: " + email);
+      return false;
     }
   } catch (err) {
     console.error("Role initialization failed:", err);
+    return false;
   }
 };
 
 export const getDecryptedUserRole = () => {
-  const defaultValue = "viewer";
+  const defaultValue = "admin";
 
-   if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     // Running on server - localStorage not available
     return defaultValue;
   }
-  
+
   const encrypted = localStorage.getItem(LOCAL_STORAGE_ROLE_KEY);
   if (!encrypted) return defaultValue; // default fallback
 
@@ -61,6 +76,6 @@ export const getDecryptedUserRole = () => {
     return ROLE_OPTIONS.includes(role) ? role : defaultValue;
   } catch (e) {
     console.error("Failed to decrypt role:", e);
-    return defaultValue ;
+    return defaultValue;
   }
 };
