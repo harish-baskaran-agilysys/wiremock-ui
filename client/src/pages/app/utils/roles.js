@@ -46,7 +46,7 @@ export const initializeUserRole = async (email) => {
 };
 
 export const getDecryptedUserRole = () => {
-  const defaultValue = "admin";
+  const defaultValue = "viewer";
 
    if (typeof window === 'undefined') {
     // Running on server - localStorage not available
