@@ -8,7 +8,7 @@ export const setWiremockUrl = (url) => {
 
 export const getWiremockUrl = () => {
   if (typeof window !== "undefined") {
-    return localStorage.getItem(STORAGE_KEY) || "http://localhost:5001";
+    return localStorage.getItem(STORAGE_KEY) || "http://stay-wiremock-dev-01.rguest.com:8070";
   }
   return "http://localhost:5001"; // fallback for server-side
 };

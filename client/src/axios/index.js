@@ -92,9 +92,10 @@ export const deleteData = async (mappingId) => {
   }
 };
 
-// Get the content of a file from /__admin/files
+// Get the content of a file from /__admin/roles
 export const getFileContent = async () => {
   const url = `${getWiremockUrl()}/__admin/roles`;
+  // const url = 'http://stay-wiremock-dev-01.rguest.com:8070/__admin/roles'
   try {
     const response = await axios.get(url, {
       headers: { Accept: "application/json" },
@@ -108,6 +109,7 @@ export const getFileContent = async () => {
 // Update or create a file using PUT
 export const postFileContent = async (content) => {
   const url = `${getWiremockUrl()}/__admin/roles`;
+  // const url = 'http://stay-wiremock-dev-01.rguest.com:8070/__admin/roles'
   try {
     await axios.post(url, content, {
       headers: { "Content-Type": "application/json" },
@@ -121,6 +123,7 @@ export const postFileContent = async (content) => {
 // Update or create a file using PUT
 export const putFileContent = async (content) => {
   const url = `${getWiremockUrl()}/__admin/roles`;
+  //  const url = 'http://stay-wiremock-dev-01.rguest.com:8070/__admin/roles'
   try {
     await axios.put(url, content, {
       headers: { "Content-Type": "application/json" },

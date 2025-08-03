@@ -5,18 +5,20 @@ import { sessionAtom } from "wiremock/recoil/atoms";
 import Input from "wiremock/components/native/inputNoChange";
 import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
+import { initializeUserRole } from "./app/utils/roles";
 
 export default function ManualLoginPage() {
   const router = useRouter();
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
   const setSession = useSetRecoilState(sessionAtom);
 
-  const handleLogin = () => {
+  const handleLogin = async  () => {
     const sessionData = {
-      user: { name, email }
+      user: { email }
     };
+
+    await initializeUserRole(email);
 
     // Save to localStorage
     localStorage.setItem("manualSession", JSON.stringify(sessionData));
@@ -31,12 +33,6 @@ export default function ManualLoginPage() {
     <div className="flex flex-col items-center justify-center h-screen">
       <div className="border border-sky-600 rounded p-8 shadow-md w-96">
         <Header label="Enter User Details" size="large" className="mb-4 flex justify-center"/>
-        <Input
-          className="w-full mb-3 p-2 border rounded"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
         <Input
           className="w-full mb-3 p-2 border rounded"
           placeholder="Email"

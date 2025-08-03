@@ -8,7 +8,7 @@ const SettingsMappings = () => {
 
   return (
     <SidebarLayout>
-      {role === "admin" ? (
+      {role !== "viewer" ? (
         <SettingsTabs />
       ) : (
         <p className="flex justify-center items-center h-[calc(100vh-250px)] w-full">

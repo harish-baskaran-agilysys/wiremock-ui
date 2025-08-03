@@ -112,7 +112,7 @@ const RequestLogChecker = () => {
                   <pre>Client IP: {log.request.clientIp}</pre>
                   <pre>Timestamp: {new Date(log.request.loggedDate).toLocaleString()}</pre>
                   <pre>Status: {log.response.status}</pre>
-                  <pre>Matched Stub ID: {log.response.headers["Matched-Stub-Id"]}</pre>
+                  {/* <pre>Matched Stub ID: {log.response.headers["Matched-Stub-Id"]}</pre> */}
                   <pre>Total Time: {log.timing.totalTime} ms</pre>
                   <h5>Headers:</h5>
                   <pre>{JSON.stringify(log.request.headers, null, 2)}</pre>

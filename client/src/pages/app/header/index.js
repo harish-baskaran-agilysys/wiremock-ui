@@ -35,7 +35,7 @@ const HeaderMapping = () => {
         className="flex justify-center items-center"
         size="large"
         label={`Welcome, ${
-          session?.user?.name || stored?.user.name || "Guest"
+          session?.user?.email || stored?.user.email || "Guest"
         }`}
       />
 
