@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { sessionAtom } from "wiremock/recoil/atoms";
 import { useRecoilState } from "recoil";
+import { initializeUserRole } from "wiremock/pages/app/utils/roles";
 
 export const enableAuth = process.env.NEXT_PUBLIC_ENABLE_AUTH === 'true';
 
@@ -25,10 +26,13 @@ export function withAuth(Component) {
             console.error("Failed to parse local manual session", e);
           }
         }
+        else {
+          initializeUserRole("guest","guest")
+        }
         return;
       }
       if (status === "loading") return;
-      if (!session) router.push("/login");
+      if (!session) router.push("/manual-login");
     }, [session, status]);
 
     const activeSession = enableAuth ? session : localSession;

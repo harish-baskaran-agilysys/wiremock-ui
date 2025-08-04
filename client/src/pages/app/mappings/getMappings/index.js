@@ -8,6 +8,7 @@ import FilteredMappings from "./FilteredMappings";
 import Logo from "wiremock/components/native/logo";
 import usePagination from "../../utils/usePagination";
 import PaginationControl from "../../utils/PaginationControl";
+import { withAuth } from "wiremock/components/withAuth";
 
 const GetMappings = (props) => {
   const [responseData, setResponseData] = useState("");
@@ -126,4 +127,4 @@ const GetMappings = (props) => {
   );
 };
 
-export default GetMappings;
+export default withAuth(GetMappings);

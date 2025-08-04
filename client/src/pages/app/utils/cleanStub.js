@@ -43,7 +43,7 @@ export const cleanStubData = (stub, session) => {
     !cleanedStub.metadata.author ||
     cleanedStub.metadata.author.trim() === ""
   ) {
-    cleanedStub.metadata.author = session?.user?.name || stored.user.name;
+    cleanedStub.metadata.author = session?.user?.name || stored?.user?.name || stored.user.email;
   }
 
   if (

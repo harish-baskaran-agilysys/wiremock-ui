@@ -56,7 +56,7 @@ const HeaderMapping = () => {
             label="Signout"
             type="primary_inverse"
             className="mr-5 mt-5"
-            onClick={() => signOut({ callbackUrl: "/login" })}
+            onClick={() => signOut({ callbackUrl: "/manual-login" })}
           />
         )}
       </div>

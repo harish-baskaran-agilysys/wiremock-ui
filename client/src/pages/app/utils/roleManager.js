@@ -1,11 +1,19 @@
 import React, { useEffect, useState, useMemo } from "react";
 import bcrypt from "bcryptjs";
-import { getFileContent, postFileContent, putFileContent } from "wiremock/axios";
+import {
+  getFileContent,
+  postFileContent,
+  putFileContent,
+} from "wiremock/axios";
 import Input from "wiremock/components/native/input";
 import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
 import { decryptData, encryptData } from "./roleEncryption";
-import { initializeDefaultRolesFile, LOCAL_STORAGE_ROLE_KEY, ROLE_OPTIONS } from "./roles";
+import {
+  initializeDefaultRolesFile,
+  LOCAL_STORAGE_ROLE_KEY,
+  ROLE_OPTIONS,
+} from "./roles";
 
 const RoleManager = () => {
   const [roles, setRoles] = useState([]);
@@ -20,13 +28,21 @@ const RoleManager = () => {
       try {
         const encrypted = await getFileContent();
         const decrypted = decryptData(encrypted["roles"]);
-        setRoles(
-          Object.entries(decrypted).map(([email, data]) => ({
-            email,
-            role: data.role,
-            password: data.password,
-          }))
-        );
+
+        // console.log("Decrypted roles:", decrypted);
+
+        if (typeof decrypted === "object" && !Array.isArray(decrypted)) {
+          setRoles(
+            Object.entries(decrypted).map(([email, data]) => ({
+              email,
+              role: data.role,
+              password: data.password,
+            }))
+          );
+        } else {
+          alert("Roles data Fetch is not in expected format:", decrypted);
+          setRoles([]);
+        }
       } catch {
         console.warn("File fetch failed, trying localStorage...");
         let stored = localStorage.getItem(LOCAL_STORAGE_ROLE_KEY);
@@ -126,9 +142,9 @@ const RoleManager = () => {
   };
 
   const handleRemove = (email) => {
-  const updated = roles.filter((r) => r.email !== email);
-  saveRoles(updated);
-};
+    const updated = roles.filter((r) => r.email !== email);
+    saveRoles(updated);
+  };
 
   return (
     <div className="flex flex-col gap-4 p-4 ">

@@ -5,6 +5,7 @@ import {
 } from "wiremock/axios";
 import { decryptData, encryptData } from "./roleEncryption";
 import bcrypt from "bcryptjs";
+import { useEffect } from "react";
 
 export const LOCAL_STORAGE_ROLE_KEY = "user-role-encrypted";
 const ENCRYPTION_KEY = "staywiremock-secret";
@@ -51,6 +52,8 @@ export const initializeUserRole = async (email, password) => {
       console.log("User role stored securely");
       return true;
     } else {
+      const encryptedRole = encryptData("viewer", ENCRYPTION_KEY);
+      localStorage.setItem(LOCAL_STORAGE_ROLE_KEY, encryptedRole);
       console.warn("Invalid credentials for: " + email);
       return false;
     }

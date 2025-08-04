@@ -83,7 +83,7 @@ const Sidebar = (props) => {
   };
 
   return (
-    <div className="flex flex-col justofy-between">
+    <div className="flex flex-col justify-between">
       <div className={`${container_styles(isCollapsed)}`}>
         <div
           className={` ${
