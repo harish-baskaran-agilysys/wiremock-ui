@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRecoilState } from "recoil";
 import { stub } from "wiremock/recoil/atoms";
-import JSONEditor from "../../../utils/monaco";
+import JSONEditor, { detectLanguage } from "../../../utils/monaco";
 
 const TransformerFieldMapping = ({ field, id }) => {
   const [reqStub, setReqStub] = useRecoilState(stub);
@@ -16,13 +16,25 @@ const TransformerFieldMapping = ({ field, id }) => {
       return;
     }
 
-    try {
-      const body =
-        reqStub.response?.transformerParameters?.http_request_maker?.[field];
-      const parsed = typeof body === "string" ? JSON.parse(body) : body;
-      setInputText(JSON.stringify(parsed || {}, null, 2));
-    } catch (e) {
-      setInputText("{}");
+    const body =
+      reqStub.response?.transformerParameters?.http_request_maker?.[field];
+
+    if (typeof body === "string") {
+      const language = detectLanguage(body);
+      if (language === "xml") {
+        setInputText(body);
+      } else {
+        try {
+          const parsed = JSON.parse(body);
+          setInputText(JSON.stringify(parsed, null, 2));
+        } catch (e) {
+          setInputText(body); // fallback
+        }
+      }
+    } else if (typeof body === "object") {
+      setInputText(JSON.stringify(body, null, 2));
+    } else {
+      setInputText(body ?? "");
     }
   }, [reqStub, field]);
 
@@ -32,13 +44,23 @@ const TransformerFieldMapping = ({ field, id }) => {
       return;
     }
 
-    try {
-      const parsed =
-        typeof inputText === "string" ? JSON.parse(inputText) : inputText;
+    isUserEdit.current = true;
+    const lang = detectLanguage(inputText);
 
-      isUserEdit.current = true;
+    setReqStub((prev) => {
+      let newFieldValue;
 
-      setReqStub((prev) => ({
+      if (lang === "json") {
+        try {
+          newFieldValue = JSON.parse(inputText);
+        } catch {
+          newFieldValue = inputText;
+        }
+      } else {
+        newFieldValue = inputText;
+      }
+
+      return {
         ...prev,
         response: {
           ...prev.response,
@@ -46,12 +68,12 @@ const TransformerFieldMapping = ({ field, id }) => {
             ...prev.response?.transformerParameters,
             http_request_maker: {
               ...prev.response?.transformerParameters?.http_request_maker,
-              [field]: parsed,
+              [field]: newFieldValue,
             },
           },
         },
-      }));
-    } catch (e) {}
+      };
+    });
   }, [inputText, field]);
 
   return (

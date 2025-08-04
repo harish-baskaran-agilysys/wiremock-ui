@@ -5,13 +5,15 @@ import SidebarLayout from "../../layout";
 import Button from "wiremock/components/native/button";
 import { withAuth } from "wiremock/components/withAuth";
 import PopupModal from "wiremock/components/native/popup1";
+import { getDecryptedUserRole } from "../../utils/roles";
 
 const RequestLogChecker = () => {
-
   const [previousLog, setPreviousLog] = useState(null);
   const [logs, setLogs] = useState([]);
   const [expandedLog, setExpandedLog] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const role = getDecryptedUserRole();
 
   const fetchLog = async () => {
     setLoading(true);
@@ -75,22 +77,28 @@ const RequestLogChecker = () => {
         <div className="flex justify-between items-center mb-4">
           <Header label="Request Logs ::" />
           <div className="flex gap-2">
+            {role !== "viewer" ? (
+              <Button
+                onClick={deleteLog}
+                type="error"
+                label={"Delete Logs"}
+                disabled={loading}
+              />
+            ) : (
+              <></>
+            )}
             <Button
-            onClick={deleteLog}
-            type="error"
-            label={"Delete Logs"}
-            disabled={loading}
-          />
-          <Button
-            onClick={fetchLog}
-            label={"Refresh Logs"}
-            disabled={loading}
-          />
+              onClick={fetchLog}
+              label={"Refresh Logs"}
+              disabled={loading}
+            />
           </div>
         </div>
 
         {loading ? (
-          <p className="flex justify-center items-center w-full">Loading logs...</p>
+          <p className="flex justify-center items-center w-full">
+            Loading logs...
+          </p>
         ) : logs?.length > 0 ? (
           logs.map((log, index) => (
             <div
@@ -106,11 +114,16 @@ const RequestLogChecker = () => {
             >
               <h4>Request {logs.length - index}</h4>
               <pre>URL: {log.request.url}</pre>
-              <pre>Method: {log.request.method}   Status: {log.response.status}</pre>
+              <pre>
+                Method: {log.request.method} Status: {log.response.status}
+              </pre>
               {expandedLog === index && (
                 <div style={{ marginTop: "10px" }}>
                   <pre>Client IP: {log.request.clientIp}</pre>
-                  <pre>Timestamp: {new Date(log.request.loggedDate).toLocaleString()}</pre>
+                  <pre>
+                    Timestamp:{" "}
+                    {new Date(log.request.loggedDate).toLocaleString()}
+                  </pre>
                   <pre>Status: {log.response.status}</pre>
                   {/* <pre>Matched Stub ID: {log.response.headers["Matched-Stub-Id"]}</pre> */}
                   <pre>Total Time: {log.timing.totalTime} ms</pre>
@@ -125,7 +138,9 @@ const RequestLogChecker = () => {
             </div>
           ))
         ) : (
-          <p className="flex justify-center items-center w-full">No logs available.</p>
+          <p className="flex justify-center items-center w-full">
+            No logs available.
+          </p>
         )}
       </div>
     </SidebarLayout>

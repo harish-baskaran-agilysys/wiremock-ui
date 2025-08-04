@@ -44,7 +44,6 @@ const Mappings = (props) => {
                     )
                   ) {
                     await DuplicateMappings(mapping.id, session);
-                    setloadAgain(true);
                     setIsPostMappingsVisible(false);
                   }
                 }}
@@ -59,7 +58,7 @@ const Mappings = (props) => {
                     )
                   ) {
                     await DeleteMappings(mapping.id);
-                    setloadAgain(true);
+                    
                     setIsPostMappingsVisible(false);
                   }
                 }}

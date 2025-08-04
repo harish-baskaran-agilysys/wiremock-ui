@@ -112,9 +112,9 @@ function CreateServer() {
             )}
           </div>
 
-          <div className="border-b-2 border-sky-600 w-full"></div>
+          {/* <div className="border-b-2 border-sky-600 w-full"></div> */}
 
-          <div className="flex gap-2">
+          {/* <div className="flex gap-2">
             <Header className="whitespace-nowrap" label="Local Server Port :" />
             <Input
               type="text"
@@ -143,7 +143,7 @@ function CreateServer() {
 
           <p className="text-sm mt-2 ml-[20px] whitespace-pre-wrap break-words text-gray-700">
             {output}
-          </p>
+          </p> */}
         </div>
       </div>
     </PopupModal>
