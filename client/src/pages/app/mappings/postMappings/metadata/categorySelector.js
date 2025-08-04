@@ -3,7 +3,7 @@ import DropdownMulti from "wiremock/components/native/dropdown_multi";
 import {
   addCategory,
   getCategories,
-} from "../../categoryMappings/categoryManager";
+} from "../../../../../components/utils/categoryManager";
 import { useEffect, useMemo, useState } from "react";
 import { stub } from "wiremock/recoil/atoms";
 import Header from "wiremock/components/native/header";

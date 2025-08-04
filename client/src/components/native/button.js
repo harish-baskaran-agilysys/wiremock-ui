@@ -39,6 +39,7 @@ const Button = forwardRef((props, ref)  => {
   );
 });
 
+Button.displayName = "Button";
 export default Button;
 /* 
     props : 

@@ -4,7 +4,7 @@ import ServerHandling from "./serverHandling";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import Header from "wiremock/components/native/header";
-import { enableAuth } from "wiremock/components/withAuth";
+import { enableAuth } from "wiremock/components/utils/withAuth";
 
 const HeaderMapping = () => {
   const { data: session, status } = useSession();

@@ -5,7 +5,7 @@ import { sessionAtom } from "wiremock/recoil/atoms";
 import Input from "wiremock/components/native/inputNoChange";
 import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
-import { initializeUserRole } from "./app/utils/roles";
+import { initializeUserRole } from "../components/utils/roles";
 
 export default function ManualLoginPage() {
   const router = useRouter();
@@ -22,7 +22,7 @@ export default function ManualLoginPage() {
     }
 
     const sessionData = {
-      user: { email },
+      user: { email,  name: email },
     };
 
     localStorage.setItem("manualSession", JSON.stringify(sessionData));

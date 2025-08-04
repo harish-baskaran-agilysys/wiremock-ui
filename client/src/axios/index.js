@@ -1,8 +1,8 @@
 // src/api.js
 
 import axios from "axios";
-import { extractAndStoreCategoriesFromStubs } from "wiremock/pages/app/mappings/categoryMappings/categoryManager";
-import { getWiremockUrl } from "wiremock/pages/app/utils/wiremockUrl";
+import { extractAndStoreCategoriesFromStubs } from "wiremock/components/utils/categoryManager";
+import { getWiremockUrl } from "wiremock/components/utils/wiremockUrl";
 
 export const getData = async () => {
   const url_wiremock = getWiremockUrl();

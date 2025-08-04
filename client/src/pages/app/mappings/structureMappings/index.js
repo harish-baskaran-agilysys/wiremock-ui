@@ -1,6 +1,6 @@
 import Header from "wiremock/components/native/header";
 import FolderTree from "./FolderView ";
-import { withAuth } from "wiremock/components/withAuth";
+import { withAuth } from "wiremock/components/utils/withAuth";
 
 const StructureMappings = (props) => {
 

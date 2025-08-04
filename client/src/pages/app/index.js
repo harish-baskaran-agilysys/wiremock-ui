@@ -1,5 +1,5 @@
 import Layout from "./layout";
-import { withAuth } from "wiremock/components/withAuth";
+import { withAuth } from "wiremock/components/utils/withAuth";
 
 function App() {
   return (

@@ -5,8 +5,8 @@ import { useRecoilValue } from "recoil";
 import { getData, postData, updateData, updateMapping } from "wiremock/axios";
 import BuilderMapping from "./paramSelector";
 import { useSession } from "next-auth/react";
-import { cleanStubData } from "../../utils/cleanStub";
-import { getDecryptedUserRole } from "../../utils/roles";
+import { cleanStubData } from "../../../../components/utils/cleanStub";
+import { getDecryptedUserRole } from "../../../../components/utils/roles";
 
 const PostMappings = (props) => {
   const role = getDecryptedUserRole();

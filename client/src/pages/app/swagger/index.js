@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import 'swagger-ui-react/swagger-ui.css';
-import { withAuth } from 'wiremock/components/withAuth';
+import { withAuth } from 'wiremock/components/utils/withAuth';
 import SidebarLayout from '../layout';
-import { getWiremockUrl } from '../utils/wiremockUrl';
+import { getWiremockUrl } from '../../../components/utils/wiremockUrl';
 
 // Dynamically import SwaggerUI to avoid SSR issues
 const SwaggerUI = dynamic(() => import('swagger-ui-react'), { ssr: false });

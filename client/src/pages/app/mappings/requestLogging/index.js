@@ -3,9 +3,9 @@ import { deleteRequestLog, getRequestLog } from "wiremock/axios";
 import Header from "wiremock/components/native/header";
 import SidebarLayout from "../../layout";
 import Button from "wiremock/components/native/button";
-import { withAuth } from "wiremock/components/withAuth";
+import { withAuth } from "wiremock/components/utils/withAuth";
 import PopupModal from "wiremock/components/native/popup1";
-import { getDecryptedUserRole } from "../../utils/roles";
+import { getDecryptedUserRole } from "../../../../components/utils/roles";
 
 const RequestLogChecker = () => {
   const [previousLog, setPreviousLog] = useState(null);

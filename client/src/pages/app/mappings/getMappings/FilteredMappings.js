@@ -44,7 +44,7 @@ const FilteredMappings = ({ mappings, setFilteredMappings }) => {
   const [filterLogic, setFilterLogic] = useState("AND"); // or "OR"
 
   const filtered = useMemo(() => {
-    return mappings.filter((mapping) => {
+    return mappings?.filter((mapping) => {
       const textMatch =
         filterLogic === "AND"
           ? filters.every(({ key, text }) => {

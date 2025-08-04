@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import DropdownMulti from "wiremock/components/native/dropdown_multi";
-import { getCategories } from "../categoryMappings/categoryManager";
+import { getCategories } from "../../../../components/utils/categoryManager";
 
 const CategoryFilterSelector = ({ onChange }) => {
   const [options, setOptions] = useState([]);

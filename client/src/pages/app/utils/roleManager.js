@@ -8,12 +8,12 @@ import {
 import Input from "wiremock/components/native/input";
 import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
-import { decryptData, encryptData } from "./roleEncryption";
+import { decryptData, encryptData } from "../../../components/utils/roleEncryption";
 import {
   initializeDefaultRolesFile,
   LOCAL_STORAGE_ROLE_KEY,
   ROLE_OPTIONS,
-} from "./roles";
+} from "../../../components/utils/roles";
 
 const RoleManager = () => {
   const [roles, setRoles] = useState([]);

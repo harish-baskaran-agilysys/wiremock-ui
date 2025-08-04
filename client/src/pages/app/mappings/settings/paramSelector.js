@@ -2,7 +2,7 @@ import { Tab, TabContainer } from "wiremock/components/native/tab";
 import CategoryInput from "../categoryMappings/categoryInput";
 import RoleManager from "../../utils/roleManager";
 import Header from "wiremock/components/native/header";
-import { getDecryptedUserRole } from "../../utils/roles";
+import { getDecryptedUserRole } from "../../../../components/utils/roles";
 
 const SettingsTabs = () => {
   const role = getDecryptedUserRole();

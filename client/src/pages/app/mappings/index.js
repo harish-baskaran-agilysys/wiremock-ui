@@ -2,7 +2,7 @@ import PostMappings from "./postMappings";
 import SidebarLayout from "../layout";
 import GetMappings from "./getMappings";
 import { useEffect, useState } from "react";
-import { withAuth } from "wiremock/components/withAuth";
+import { withAuth } from "wiremock/components/utils/withAuth";
 
 function App() {
   const [newMapping, setNewMapping] = useState(false);

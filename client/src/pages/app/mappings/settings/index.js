@@ -1,7 +1,7 @@
 import SidebarLayout from "../../layout";
-import { withAuth } from "wiremock/components/withAuth";
+import { withAuth } from "wiremock/components/utils/withAuth";
 import SettingsTabs from "./paramSelector";
-import { getDecryptedUserRole } from "../../utils/roles";
+import { getDecryptedUserRole } from "../../../../components/utils/roles";
 
 const SettingsMappings = () => {
   const role = getDecryptedUserRole();

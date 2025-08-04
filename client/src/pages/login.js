@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
-import { initializeUserRole } from "./app/utils/roles";
-import { enableAuth } from "wiremock/components/withAuth";
+import { initializeUserRole } from "../components/utils/roles";
+import { enableAuth } from "wiremock/components/utils/withAuth";
 
 export default function LoginPage() {
   const { data: session } = useSession();

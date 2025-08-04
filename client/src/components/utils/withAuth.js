@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { sessionAtom } from "wiremock/recoil/atoms";
 import { useRecoilState } from "recoil";
-import { initializeUserRole } from "wiremock/pages/app/utils/roles";
+import { initializeUserRole } from "wiremock/components/utils/roles";
 
 export const enableAuth = process.env.NEXT_PUBLIC_ENABLE_AUTH === 'true';
 

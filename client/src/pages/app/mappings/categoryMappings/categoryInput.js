@@ -3,7 +3,7 @@ import {
   addCategory,
   getCategories,
   deleteCategory,
-} from "./categoryManager";
+} from "../../../../components/utils/categoryManager";
 import Input from "wiremock/components/native/input";
 import Button from "wiremock/components/native/button";
 import Header from "wiremock/components/native/header";
